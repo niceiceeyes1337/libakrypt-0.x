@@ -109,35 +109,3 @@ void belt_encrypt(ak_uint8 *ks, ak_uint8 *inBlock, ak_uint8 *outBlock)
     ((ak_uint32 *)outBlock)[2] = a;
     ((ak_uint32 *)outBlock)[3] = c;
 }
-
-void belt_decrypt(ak_uint8* ks, ak_uint8* inBlock, ak_uint8* outBlock)
-{
-    ak_uint32 a = ((ak_uint32 *)inBlock)[0];
-    ak_uint32 b = ((ak_uint32 *)inBlock)[1];
-    ak_uint32 c = ((ak_uint32 *)inBlock)[2];
-    ak_uint32 d = ((ak_uint32 *)inBlock)[3];
-    ak_uint32 e;
-    int i;
-    ak_uint32 * key = (ak_uint32*)ks;
-
-    for(i = 7; i >= 0; --i)
-    {
-        b ^= G((a + key[KeyIndex[i][6]]), H, 5);
-        c ^= G((d + key[KeyIndex[i][5]]), H, 21);
-        a = (uint32_t)(a - G((b + key[KeyIndex[i][4]]), H, 13));
-        e = (G((b + c + key[KeyIndex[i][3]]), H, 21) ^ (uint32_t)(i + 1));
-        b += e;
-        c = (uint32_t)(c - e);
-        d += G((c + key[KeyIndex[i][2]]), H, 13);
-        b ^= G((a + key[KeyIndex[i][1]]), H, 21);
-        c ^= G((d + key[KeyIndex[i][0]]), H, 5);
-        SWAP(a, b);
-        SWAP(c, d);
-        SWAP(a, d);
-    }
-
-    ((ak_uint32 *)outBlock)[0] = c;
-    ((ak_uint32 *)outBlock)[1] = a;
-    ((ak_uint32 *)outBlock)[2] = d;
-    ((ak_uint32 *)outBlock)[3] = b;
-}

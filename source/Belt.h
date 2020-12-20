@@ -9,6 +9,5 @@
 
 void belt_init(ak_uint8* k, int kLen, ak_uint8* ks);
 void belt_encrypt(ak_uint8* ks, ak_uint8* inBlock, ak_uint8* outBlock);
-void belt_decrypt(ak_uint8 *ks, ak_uint8 *inBlock, ak_uint8 *outBlock);
 
 #endif

@@ -27,7 +27,5 @@ typedef struct
 void belt_hash_init(belt_hash_state ctx[1]);
 void belt_hash(const ak_uint8 data[], ak_uint64 len, belt_hash_state ctx[1]);
 void belt_end(ak_uint8 hval[], belt_hash_state ctx[1]);
-void belt_calculate(const ak_uint8* data, ak_uint64 len, ak_uint8 hval[]);
-
 
 #endif //BELT_HASH_H

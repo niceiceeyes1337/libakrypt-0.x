@@ -160,27 +160,3 @@ void belt_end(ak_uint8 hval[], belt_hash_state ctx[1])
     }
     finalize(ctx, hval);
 }
-
-void belt_calculate(const ak_uint8* data, ak_uint64 len, ak_uint8 hval[])
-{
-    belt_hash_state ctx;
-    belt_hash_init(&ctx);
-
-    ctx.acc_occupied = len & (BELT_HASH_BLOCK_LEN - 1);
-    while(len > ctx.acc_occupied)
-    {
-        increment_len_block(&ctx);
-        iteration((ak_uint8*)data, ctx.h, ctx.state_ptr);
-        data += BELT_HASH_BLOCK_LEN;
-        len -= BELT_HASH_BLOCK_LEN;
-    }
-
-    if(ctx.acc_occupied > 0)
-    {
-        memcpy(ctx.accumulator, data, ctx.acc_occupied);
-        iteration(ctx.accumulator, ctx.h, ctx.state_ptr);
-        increment_len_bytes(&ctx, ctx.acc_occupied);
-    }
-
-    finalize(&ctx, hval);
-}
