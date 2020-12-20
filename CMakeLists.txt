@@ -82,6 +82,11 @@ set( AKRYPT_SOURCES
    source/ak_asn1_keys.c
    source/ak_asn1_cert.c
    source/ak_blom.c
+   source/Belt.h
+   source/Belt.c
+   source/BeltHash.h
+   source/BeltHash.c
+
 )
 
 # -------------------------------------------------------------------------------------------------- #
@@ -192,6 +197,7 @@ set ( ARITHMETIC_TESTS_LIST
       asn1-keys
       asn1-cert
       blom-keys
+      belt
     )
 
 if( LIBAKRYPT_GMP_TESTS )
