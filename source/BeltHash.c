@@ -1,4 +1,4 @@
-#include <string.h>     /* for memcpy() etc.        */
+#include <string.h>
 
 #include "BeltHash.h"
 #include "Belt.h"
@@ -30,32 +30,24 @@ static void sigma1(ak_uint8* u12, ak_uint8* u34, ak_uint8* result)
     ((ak_uint64*)result)[1] ^= ((ak_uint64*)u3u4)[1];
 }
 
-// it's safe to put h here into result
-// x = u1 || u2, h = u3 || u4
-// len(x) = 256 bit, len(h) = 256 bit
 static void sigma2(ak_uint8* x, ak_uint8* h, ak_uint8* result)
 {
     ak_uint8 teta[BELT_KS];
     ak_uint64 h0 = ((ak_uint64*)h)[0];
     ak_uint64 h1 = ((ak_uint64*)h)[1];
 
-    // teta1 = sigma1(u) || u4
     sigma1(x, h, teta);
     ((ak_uint64*)teta)[2] = ((ak_uint64*)h)[2];
     ((ak_uint64*)teta)[3] = ((ak_uint64*)h)[3];
 
-    // F_{teta1}(u1) xor u1
     belt_encrypt(teta, x, result);
 
     ((ak_uint64*)result)[0] ^= ((ak_uint64*)x)[0];
     ((ak_uint64*)result)[1] ^= ((ak_uint64*)x)[1];
 
-    // (sigma1(u) xor 0xff..ff) || u3
-    // invert first part of teta1
     ((ak_uint64*)teta)[0] ^= 0xffffffffffffffffull;
     ((ak_uint64*)teta)[1] ^= 0xffffffffffffffffull;
 
-    // if result == h at this moment original h[0] and h[1] are lost
     ((ak_uint64*)teta)[2] = h0;
     ((ak_uint64*)teta)[3] = h1;
 
@@ -67,9 +59,7 @@ static void sigma2(ak_uint8* x, ak_uint8* h, ak_uint8* result)
 
 static void iteration(ak_uint8* x, ak_uint8* h, ak_uint8* s)
 {
-    // update state: s <- s xor sigma1(x_i || h)
     sigma1_xor(x, h, s);
-    // update h: h <- sigma2(x_i || h)
     sigma2(x, h, h);
 }
 
