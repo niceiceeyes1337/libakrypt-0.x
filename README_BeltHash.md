@@ -16,3 +16,4 @@ source/BeltHash.c
 ## Тесты
 
 Тесты реализованы в файле examples/test_belt.c
+<img src="https://github.com/niceiceeyes1337/libakrypt-0.x/blob/master/TestBelt.jpg" width="800"/>
